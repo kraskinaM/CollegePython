@@ -1,0 +1,8 @@
+str1 = ("Life is what happens")
+str2 = ("    when")
+str3 = ("       you're busy making other plans")
+str4 = ("                                 John Lennon.")
+print(str1)
+print(str2)
+print(str3)
+print(str4)
