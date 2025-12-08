@@ -2,7 +2,7 @@ products = {
     "Фрукты": [("Яблоки", 15, 60), ("Бананы", 10, 80)],
     "Овощи": [("Морковь", 20, 30)],
     "Напитки": [("Чай", 25, 50), ("Кофе", 100, 10)],
-    "Сбачки": [("Пушистые", 20, 30)]
+    "Собачки": [("Пушистые", 20, 30)]
 }
 print("Категории товаров:")
 for category, items in products.items():
@@ -26,4 +26,5 @@ for category, items in products.items():
         max_category = category
 print(f"\nКатегория с наибольшим количеством товаров: {max_category} — {max_quantity} шт.")
 total_cost = sum(item[1] * item[2] for items in products.values() for item in items)
+
 print(f"\nОбщая стоимость всех товаров в магазине: {total_cost} руб.")
