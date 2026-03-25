@@ -1,120 +1,83 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from tabulate import tabulate
-V1 = 15
-V2 = 20
-delta_t = 1
-start_time_1 = 8
-start_time_2 = 9
-S0 = V1 * delta_t
-V_rel = V2 - V1
-t_meet_after_second = S0 / V_rel
-t1_total = delta_t + t_meet_after_second
-S_meet = V1 * t1_total
-meet_hour = start_time_1 + t1_total
-meet_hours = int(meet_hour)
-meet_minutes = int((meet_hour - meet_hours) * 60)
-print("=" * 60)
-print("                ЛАБОРАТОРНАЯ РАБОТА ПО ФИЗИКЕ")
-print("                Тема: График движения двух тел")
-print("=" * 60)
-print("\n┌────────────── ДАНО ──────────────┐")
-print(f"│ Скорость первого велосипедиста: V₁ = {V1} км/ч")
-print(f"│ Скорость второго велосипедиста: V₂ = {V2} км/ч")
-print(f"│ Время старта первого: 8:00")
-print(f"│ Время старта второго: 9:00")
-print(f"│ Разница во времени старта: Δt = {delta_t} час")
-print("└─────────────────────────────────┘")
-print("\n┌────────────── РЕШЕНИЕ ──────────────┐")
-print(f"│ 1. За {delta_t} час первый проехал: S₀ = V₁ × Δt = {V1} × {delta_t} = {S0} км")
-print(f"│ 2. Относительная скорость: V_отн = V₂ - V₁ = {V2} - {V1} = {V_rel} км/ч")
-print(f"│ 3. Время встречи после выезда второго:")
-print(f"│    t = S₀ / V_отн = {S0} / {V_rel} = {t_meet_after_second:.2f} ч")
-print(f"│ 4. Общее время движения первого до встречи:")
-print(f"│    t₁ = Δt + t = {delta_t} + {t_meet_after_second:.2f} = {t1_total:.2f} ч")
-print(f"│ 5. Расстояние до встречи:")
-print(f"│    S = V₁ × t₁ = {V1} × {t1_total:.2f} = {S_meet:.2f} км")
-print("└─────────────────────────────────┘")
-print("\n┌────────────── ОТВЕТ ──────────────┐")
-print(f"│ Второй велосипедист догонит первого:")
-print(f"│ через {t_meet_after_second:.2f} часа после своего выезда")
-print(f"│ в {meet_hours:02d}:{meet_minutes:02d}")
-print(f"│ на расстоянии {S_meet:.1f} км от пункта отправления")
-print("└─────────────────────────────────┘")
-print("\n" + "=" * 60)
-print("                   ТАБЛИЦА ДВИЖЕНИЯ")
-print("=" * 60)
-table_data = []
-times = []
-for hour in range(8, 13):
-    for minute in [0, 30]:
-        if hour == 12 and minute > 0:
-            continue
-        time_h = hour + minute / 60
-        if time_h >= 8:
-            S1 = V1 * (time_h - 8)
-        else:
-            S1 = 0
-        if time_h >= 9:
-            S2 = V2 * (time_h - 9)
-        else:
-            S2 = 0
-        time_str = f"{hour:02d}:{minute:02d}"
-        if abs(time_h - meet_hour) < 0.01:
-            meeting_mark = "← ВСТРЕЧА"
-        else:
-            meeting_mark = ""
-        table_data.append([time_str, f"{S1:.1f}", f"{S2:.1f}", meeting_mark])
-        times.append(time_h)
-try:
-    headers = ["Время", "Путь 1-го (км)", "Путь 2-го (км)", ""]
-    print(tabulate(table_data, headers=headers, tablefmt="grid"))
-except:
-    print("\nВремя | Путь 1-го (км) | Путь 2-го (км) |")
-    print("-" * 50)
-    for row in table_data:
-        print(f"{row[0]:^6} | {row[1]:^14} | {row[2]:^14} | {row[3]}")
-print("\n" + "=" * 60)
-print("                   ГРАФИК ДВИЖЕНИЯ")
-print("=" * 60)
-print("Закройте график, чтобы продолжить...")
-t_detailed = np.linspace(8, 12, 100)
-S1_detailed = np.zeros_like(t_detailed)
-S2_detailed = np.zeros_like(t_detailed)
-for i, t in enumerate(t_detailed):
-    if t >= 8:
-        S1_detailed[i] = V1 * (t - 8)
-    if t >= 9:
-        S2_detailed[i] = V2 * (t - 9)
-plt.figure(figsize=(10, 6))
-plt.plot(t_detailed, S1_detailed, 'b-', linewidth=2, label='Первый велосипедист (15 км/ч)')
-plt.plot(t_detailed, S2_detailed, 'r-', linewidth=2, label='Второй велосипедист (20 км/ч)')
-plt.plot(meet_hour, S_meet, 'go', markersize=10, label=f'Встреча в {meet_hours:02d}:{meet_minutes:02d}')
-plt.grid(True, linestyle='--', alpha=0.7)
-plt.xlabel('Время (часы)', fontsize=12)
-plt.ylabel('Расстояние от старта (км)', fontsize=12)
-plt.title('График движения двух велосипедистов', fontsize=14)
-plt.legend(fontsize=10)
-plt.xticks(np.arange(8, 12.5, 0.5), [f"{int(h)}:{'30' if h%1 else '00'}" for h in np.arange(8, 12.5, 0.5)])
-plt.yticks(np.arange(0, 70, 10))
-plt.xlim(8, 12)
-plt.ylim(0, 65)
-plt.axvline(x=meet_hour, color='green', linestyle='--', alpha=0.5)
-plt.axhline(y=S_meet, color='green', linestyle='--', alpha=0.5)
-plt.annotate(f'({meet_hours:02d}:{meet_minutes:02d}, {S_meet:.0f} км)',
-             xy=(meet_hour, S_meet), xytext=(meet_hour + 0.2, S_meet - 5),
-             arrowprops=dict(arrowstyle='->', color='green'),
-             fontsize=10, color='green')
-plt.tight_layout()
-plt.show()
-print("\n" + "=" * 60)
-print("                        ВЫВОД")
-print("=" * 60)
-print("В ходе выполнения лабораторной работы была решена")
-print("задача на относительность движения. Установлено, что")
-print(f"при заданных начальных условиях второй велосипедист")
-print(f"догонит первого через {t_meet_after_second:.2f} часа после")
-print(f"своего старта (в {meet_hours:02d}:{meet_minutes:02d}) на расстоянии")
-print(f"{S_meet:.1f} км от точки отправления. Результаты получены")
-print("аналитическим методом и подтверждены графически.")
-print("=" * 60)
+import math
+
+print("=" * 50)
+print("Задача 4.1: Колесо обозрения")
+print("=" * 50)
+
+R = 20
+T = 40
+h_osi = 22
+
+omega = 2 * math.pi / T
+print(f"1. Угловая скорость ω = {omega:.4f} рад/с")
+
+V = omega * R
+print(f"2. Линейная скорость V = {V:.2f} м/с")
+
+a_cs = V**2 / R
+print(f"3. Центростремительное ускорение a_цс = {a_cs:.2f} м/с²")
+print(f"   (альтернативно: ω²·R = {omega**2 * R:.2f} м/с²)")
+
+t = 20  # с
+S = V * t
+peremeshenie = 2 * R
+print(f"4. За t = {t} с (половина оборота):")
+print(f"   Путь S = {S:.2f} м")
+print(f"   Перемещение |Δr| = {peremeshenie:.2f} м")
+
+S_full = 2 * math.pi * R
+print(f"\nПроверка за полный оборот ({T} с):")
+print(f"   Путь = {S_full:.2f} м")
+print(f"   Перемещение = 0 м")
+
+print(f"\n5. Высота кабинки над землей:")
+times = [0, 5, 10, 15, 20, 25, 30, 35, 40]
+for t_moment in times:
+
+    h = h_osi + R * math.sin(omega * t_moment - math.pi / 2)
+    print(f"   t = {t_moment:3d} с → h = {h:.2f} м")
+
+print("\n")
+
+print("=" * 50)
+print("Задача 4.2: Спутник Земли")
+print("=" * 50)
+
+R_z = 6370
+h = 200
+T_min = 88
+
+R_orb_km = R_z + h
+R_orb_m = R_orb_km * 1000
+print(f"1. Радиус орбиты:")
+print(f"   R_орб = {R_orb_km} км = {R_orb_m:.0f} м")
+
+T_s = T_min * 60
+omega = 2 * math.pi / T_s
+print(f"2. Угловая скорость ω = {omega:.6f} рад/с")
+
+V = omega * R_orb_m
+V_kms = V / 1000
+print(f"3. Линейная скорость:")
+print(f"   V = {V:.2f} м/с = {V_kms:.2f} км/с")
+
+a_cs = V**2 / R_orb_m
+g = 9.81
+print(f"4. Центростремительное ускорение:")
+print(f"   a_цс = {a_cs:.2f} м/с² (≈ {a_cs/g:.2f}g)")
+
+L_km = 2 * math.pi * R_orb_km
+print(f"5. Длина орбиты:")
+print(f"   L = {L_km:.2f} км")
+
+N = 24 * 60 / T_min
+print(f"6. Количество оборотов за сутки:")
+print(f"   N = {N:.2f} оборота")
+
+print("\n")
+print("=" * 50)
+print("Проверка (теоретические значения для низкой орбиты):")
+print("   V ≈ 7.8 км/с (первая космическая)")
+print("   T ≈ 88-90 мин")
+print("   N ≈ 16 оборотов в сутки")
+print("=" * 50)
